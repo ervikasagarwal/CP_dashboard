@@ -13,8 +13,8 @@
     function drawChart() {
       var data = google.visualization.arrayToDataTable([
       ['Task', 'Hours per Day'],
-      ['Positive', 4],
-      ['Negative', 4],
+      ['Positive', 3],
+      ['Negative', 5],
       ['Same', 4]
     ]);
     
@@ -66,16 +66,17 @@
 <div class="row">
         <div class="row col-sm-12 border-bottom ">
            <div class="col-sm-6"><h3>Detailed Activity</h3></div> 
+           
            <div class="col-sm-6 row ">
                 <a type="button" class="Weeklybtn col-sm-3 btn btn-primary " href="/7">7 days</a>
                 <a type="button" class=" btn btn-primary col-sm-3" href="/15">15 days</a>
                 <a type="button" class=" btn btn-primary col-sm-3" href="/30">30 days</a>
                 <a type="button" class=" btn btn-primary col-sm-3" href="/excel">Export Sheet</a>
            </div>
-            
         </div>
+        <div class="col-sm-12 row" style="height:30px;"></div>
         <div class="row col-sm-12 ">
-            <table class="table  table-stripped col-sm-12 text-center" style="width:200px">
+            <table class="table  table-stripped col-sm-12 text-center bg-white" style="width:200px">
                 
                     <tr>
                         <th>Orgid</th>
@@ -90,8 +91,8 @@
                     </tr>
                     
                     <%    
-                          for( i in result){
-                              let org = result[i];
+                        for( i in result){
+                            let org = result[i];
                     %>
                     <tr>
                         <td><%= org.id%></td>
