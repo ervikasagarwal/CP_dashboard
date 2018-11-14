@@ -92,10 +92,10 @@ const getLastNDaysOfflineTest = async (days) => {
   }
 };
 
-const getOrgObject = (async () => {
+const getOrgs = (async () => {
   try {
     const connection = await mysql2.createConnection(config);
-    const query = 'select id,orgCode from organizations';
+    const query = 'select id,name,orgCode from organizations';
     const resultSet = await connection.execute(query);
     const orgs = {};
     resultSet[0].map((org) => {
@@ -127,7 +127,7 @@ const getLastNDaysFreeResources = (async (days) => {
   }
 });
 
-const indexPageData = (async (days) => {
+const getTableData = (async (days) => {
   try {
     const attendance = await getLastNDaysAttendance(days);
     const attendanceTopics = await getLastNDaysAttendanceTopics(days);
@@ -136,7 +136,7 @@ const indexPageData = (async (days) => {
     const onlineTests = await getLastNDaysOnlineTest(days);
     const offlineTests = await getLastNDaysOfflineTest(days);
     const freeResources = await getLastNDaysFreeResources(days);
-    const orgs = await getOrgObject();
+    const orgs = await getOrgs();
     console.log(attendanceTopics); // object of objects
     for (i in orgs) {
       orgs[i].attendance = 0;
@@ -172,22 +172,18 @@ const indexPageData = (async (days) => {
       orgs[id].onlineTests = i.tests;
     });
     freeResources.forEach((i) => {
-      console.log('------------------to------------------------');
-      console.log(i);
       const id = i.orgid;
       console.log(id);
       orgs[id].freeResources = i.free_resources;
     });
-    console.log(orgs);
     return orgs; //  object  of all objects
   } catch (err) {
     console.log(`Error:- error thrown by indexPageData() method at ( Controller.js ) ${err}`);
     return err;
   }
 });
-indexPageData(7);
 module.exports = {
-  getOrgObject,
+  getOrgs,
   testFn,
   getLastNDaysAttendance,
   getLastNDaysAttendanceTopics,
@@ -196,5 +192,6 @@ module.exports = {
   getLastNDaysOnlineTest,
   getLastNDaysOfflineTest,
   getLastNDaysFreeResources,
-  indexPageData,
+  // indexPageData,
+  getTableData,
 };

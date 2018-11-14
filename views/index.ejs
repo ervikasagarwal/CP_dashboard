@@ -13,9 +13,9 @@
     function drawChart() {
       var data = google.visualization.arrayToDataTable([
       ['Task', 'Hours per Day'],
-      ['Positive', 8],
-      ['Negative', 2],
-      ['Same', 2]
+      ['Positive', 4],
+      ['Negative', 4],
+      ['Same', 4]
     ]);
     
       // Optional; add a title and set the width and height of the chart
@@ -30,7 +30,7 @@
 </head>
 <body style="background:#eff5f5;">
 
-<div class="header " style="height:100px;coloe:lightblue;"><h2>ClassPlus Deshboard</h2></div>
+<div class="header " style="height:100px;color:lightblue;"><h2>ClassPlus Deshboard</h2></div>
 <div class="row">
    <div class="col-sm-1"></div>
    <div class="col-sm-5 row bg-white ">
@@ -86,19 +86,27 @@
                         <th>Offline Test</th>
                         <th>Online Test</th>
                         <th>Announcement</th>
-                        <th>Total </th>
+                        <th>Resources</th>
                     </tr>
                     
-                    <%    result.forEach(function (insti){ %>
-                            
+                    <%    
+                          for( i in result){
+                              let org = result[i];
+                    %>
                     <tr>
-                        <td><%= insti.id%></td>
-                        <td><a href="/show/<%= insti.orgid %>"><%="abc"%></a></td>
-                        <td><%= insti.attendance%><%= ins%></td>
-                        <td><%= insti.homework%></td>
-                        <td><%= insti.announcement%></td>
+                        <td><%= org.id%></td>
+                        <td><a href="/org/<%= org.orgid %>"><%= org.name%></a></td>
+                        <td><%= org.attendance%></td>
+                        <td><%= org.attendanceTopics%></td>
+                        <td><%= org.homeWorks%></td>
+                        <td><%= org.offlineTests%></td>
+                        <td><%= org.onlineTests%></td>
+                        <td><%= org.announcements %></td>
+                        <td><%= org.freeResources%></td>
                     </tr>
-                    <% }); %>
+                    <%
+                          }  
+                    %>
             </table>
         </div>
     </div>

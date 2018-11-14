@@ -6,6 +6,8 @@ const controller = require('../controllers/controller');
 router.get('/', async (_req, res) => {
   try {
     const result = await controller.getTableData(15);
+    console.log('result');
+    console.log(result);
     res.render('index.ejs', { result });
   } catch (err) {
     res.send('server error');
