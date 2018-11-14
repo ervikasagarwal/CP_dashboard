@@ -1,0 +1,63 @@
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable
+            ([['X', '1', '2', '3', '4', '5', '6'],
+              [1, 2, 5, 4, 5, 6, 7],
+              [2, 3, 4, 5, 6, 7, 8],
+              [3, 4, 5, 6, 7, 8, 9],
+              [4, 5, 6, 7, 8, 9, 10],
+              [5, 6, 7, 8, 9, 10, 11],
+              [6, 7, 8, 9, 10, 11, 12]
+        ]);
+
+        var options = {
+          legend: 'none',
+          series: {
+            0: { color: '#e2431e' },
+            1: { color: '#e7711b' },
+            2: { color: '#f1ca3a' },
+            3: { color: '#6f9654' },
+            4: { color: '#1c91c0' },
+            5: { color: '#43459d' },
+          }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  <h1>Detailed Orgid View</h1>
+<div class="container">
+<!--<div class="panel panel-default">-->
+<div class="well">
+    <h3><b><%=r.coachingName%></b> classes</h3>
+    <!--</div>-->
+    <!--<div class="panel-body">-->
+    <p><b>Orgid- </b> <%= r.orgid%></p>
+    <p><b>CSM- </b><%= r.csm%></p>
+    <p><b>Location- </b><%= r.location%></p>
+    </div>
+<!--</div>-->
+
+<div class="well">
+     <!--<div class="panel-heading">-->
+    <h3><b>Institute Stats</b></h3>
+    <!--</div>-->
+    <!--<div class="panel-body">-->
+    <p><b>Total Signups- </b><%=r.signups%></p>
+    <p><b>Students in Batch- </b><%=r.studentNo%></p>
+</div>
+<!--</div>-->
+
+</div>
+
+</body>
