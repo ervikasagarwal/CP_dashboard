@@ -5,7 +5,8 @@ const controller = require('../controllers/controller');
 
 router.get('/', async (_req, res) => {
   try {
-    const result = await controller.getTableData(15);
+    // const result = await controller.getTableData(15);
+    const result = await controller.getOrgs();
     console.log('result');
     console.log(result);
     res.render('index.ejs', { result });

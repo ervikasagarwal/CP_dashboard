@@ -5,6 +5,9 @@ const readPool = mysql2.createPool({
   user: 'root',
   password: '2b91c492803820c8ea117b2399b65d48',
   database: 'classplus-staging',
+  multipleStatements: true,
+  timezone: 'ist',
+  charset: 'utf8mb4',
 });
 
 module.exports = {
