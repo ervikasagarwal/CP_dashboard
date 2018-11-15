@@ -1,5 +1,6 @@
 const express = require('express');
 const router = require('./routers/router.js');
+const sqlConn = require('./config/sqlConnection');
 
 const app = express();
 

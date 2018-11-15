@@ -1,15 +1,15 @@
 const mysql2 = require('mysql2/promise');
 const config = require('../config/config').SQLdb;
-
+const connection = require('../config/sqlConnection').readPool;
 
 const getLastNDaysAttendance = (async (days) => {
   console.log('getLastNDaysAttendance() executing..........');
+  console.log(global.sqlConn);
   try {
-    const connection = await mysql2.createConnection(config);
+    // const connection = await mysql2.createConnection(config);
     const query = `select orgId ,sum(b.isPresent) as attendance,date(modifiedAt) as date from ( SELECT u.orgId, u.id, u.name, u.mobile, u.type, t.id as tutorId,b.batchId as batchId  FROM users u INNER JOIN  tutors t ON t.userId = u.id INNER JOIN batch_ownership b on b.tutorId  = t.id  ORDER BY orgId) as tutorTable left join batch_attendance b  on b.batchId=tutorTable.batchId where date(modifiedAt) >= DATE(NOW()) - INTERVAL ${days} DAY GROUP BY orgId;`;
-    const resultSet = await connection.execute(query);
+    const resultSet = await connection.query(query);
     console.log(resultSet[0]);
-    connection.end();
     return resultSet[0];
   } catch (err) {
     console.log(`Error:- error thrown by getLastNDaysAttendance() method at ( Controller.js ) ${err}`);
@@ -20,11 +20,10 @@ const getLastNDaysAttendance = (async (days) => {
 const getLastNDaysAttendanceTopics = (async (days) => {
   console.log('getLastNDaysAttendanceTopics() executing..........');
   try {
-    const connection = await mysql2.createConnection(config);
+    // const connection = await mysql2.createConnection(config);
     const query = `select orgId ,count(at.batchId) as topic,date(createdAt) as date from ( SELECT u.orgId, u.id, u.name, u.mobile, u.type, t.id as tutorId,b.batchId as batchId  FROM users u INNER JOIN  tutors t ON t.userId = u.id INNER JOIN batch_ownership b on b.tutorId  = t.id  ORDER BY orgId) as tutorTable left join daily_topics at on at.batchId=tutorTable.batchId where date(createdAt) >= DATE(NOW()) - INTERVAL ${days} DAY GROUP BY orgId`;
     const resultSet = await connection.execute(query);
     console.log(resultSet[0]);
-    connection.end();
     return resultSet[0];
   } catch (err) {
     console.log(`Error:- error thrown by getLastNDaysAttendance() method at ( Controller.js ) ${err}`);
@@ -35,7 +34,7 @@ const getLastNDaysAttendanceTopics = (async (days) => {
 const getLastNDaysAnnouncement = async (days) => {
   console.log('getNDaysAnnouncement() executing..........');
   try {
-    const connection = await mysql2.createConnection(config);
+    // const connection = await mysql2.createConnection(config);
     const query = `select orgId ,count(a.description) as announcement,date(modifiedAt) as date from ( SELECT u.orgId, u.id, u.name, u.mobile, u.type, t.id as tutorId,b.batchId as batchId  FROM users u INNER JOIN  tutors t ON t.userId = u.id INNER JOIN batch_ownership b on b.tutorId  = t.id  ORDER BY orgId) as tutorTable left join announcements a on a.batchId=tutorTable.batchId where date(modifiedAt) >= DATE(NOW()) - INTERVAL ${days} DAY GROUP BY orgId`;
     const resultSet = await connection.execute(query);
     console.log(resultSet[0]);
@@ -50,10 +49,9 @@ const getLastNDaysAnnouncement = async (days) => {
 const getLastNDaysHomework = async (days) => {
   console.log('getNDaysHomework() executing..........');
   try {
-    const connection = await mysql2.createConnection(config);
+    // const connection = await mysql2.createConnection(config);
     const query = `select orgId ,round(count(hw.batchId)/2) as homeworks,date(hw.createdAt) as date from ( SELECT u.orgId, u.id, u.name, u.mobile, u.type, t.id as tutorId,b.batchId as batchId  FROM users u INNER JOIN  tutors t ON t.userId = u.id INNER JOIN batch_ownership b on b.tutorId  = t.id  ORDER BY orgId) as tutorTable left join homeworks hw on hw.batchId=tutorTable.batchId where date(createdAt) >= DATE(NOW()) - INTERVAL ${days} DAY GROUP BY orgId;`;
     const resultSet = await connection.execute(query);
-    connection.end();
     console.log(resultSet[0]);
     return resultSet[0];
   } catch (err) {
@@ -65,10 +63,9 @@ const getLastNDaysHomework = async (days) => {
 const getLastNDaysOnlineTest = async (days) => {
   console.log('getLastNDaysOnlineTest() executing..........');
   try {
-    const connection = await mysql2.createConnection(config);
+    // const connection = await mysql2.createConnection(config);
     const query = `select orgId ,count(c.id) as tests ,date(tr.createdAt) as date from ( SELECT u.orgId, u.id, u.name, u.mobile, u.type, t.id as tutorId,b.batchId as batchId  FROM users u INNER JOIN  tutors t ON t.userId = u.id INNER JOIN batch_ownership b on b.tutorId  = t.id  ORDER BY orgId) as tutorTable left join homeworks hw on hw.batchId=tutorTable.batchId inner join batches bat on bat.batchId=tutorTable.batchId inner join chapters c on c.subjectId=bat.subjectId left join tests test on test.chapterId=c.id inner join test_results tr on tr.batchTestId=test.id where test.onlineTestType IS NOT NULL AND tr.createdAt >= DATE(NOW()) - INTERVAL ${days} DAY GROUP BY orgId`;
     const resultSet = await connection.execute(query);
-    connection.end();
     console.log(resultSet[0]);
     return resultSet[0];
   } catch (err) {
@@ -80,10 +77,9 @@ const getLastNDaysOnlineTest = async (days) => {
 const getLastNDaysOfflineTest = async (days) => {
   console.log('getLastNDaysOfflineTest() executing..........');
   try {
-    const connection = await mysql2.createConnection(config);
+    // const connection = await mysql2.createConnection(config);
     const query = `select orgId ,count(c.id) as tests ,date(tr.createdAt) as date from ( SELECT u.orgId, u.id, u.name, u.mobile, u.type, t.id as tutorId,b.batchId as batchId  FROM users u INNER JOIN  tutors t ON t.userId = u.id INNER JOIN batch_ownership b on b.tutorId  = t.id  ORDER BY orgId) as tutorTable left join homeworks hw on hw.batchId=tutorTable.batchId inner join batches bat on bat.batchId=tutorTable.batchId inner join chapters c on c.subjectId=bat.subjectId left join tests test on test.chapterId=c.id inner join test_results tr on tr.batchTestId=test.id where test.onlineTestType IS NULL AND tr.createdAt >= DATE(NOW()) - INTERVAL ${days} DAY GROUP BY orgId`;
     const resultSet = await connection.execute(query);
-    connection.end();
     console.log(resultSet[0]);
     return resultSet[0];
   } catch (err) {
@@ -94,7 +90,7 @@ const getLastNDaysOfflineTest = async (days) => {
 
 const getOrgs = (async () => {
   try {
-    const connection = await mysql2.createConnection(config);
+    // const connection = await mysql2.createConnection(config);
     const query = 'select id,name,orgCode from organizations';
     const resultSet = await connection.execute(query);
     const orgs = {};
@@ -108,7 +104,7 @@ const getOrgs = (async () => {
   }
 });
 const testFn = (async () => {
-  const connection = await mysql2.createConnection(config);
+  // const connection = await mysql2.createConnection(config);
   const query = 'SELECT u.orgId, u.id, u.name, u.mobile, u.type, t.id as tutorId, b.batchId as batchId  FROM users u INNER JOIN  tutors t ON t.userId = u.id INNER JOIN batch_ownership b on b.tutorId  = t.id  ORDER BY orgId';
   const resultSet = await connection.execute(query);
   return resultSet[0];
@@ -116,13 +112,23 @@ const testFn = (async () => {
 const getLastNDaysFreeResources = (async (days) => {
   console.log('getLastNDaysFreeResources() executing..........');
   try {
-    const connection = await mysql2.createConnection(config);
+    // const connection = await mysql2.createConnection(config);
     const query = `select count(v.orgId) as free_resources,date(v.createdAt) as date,v.orgId as orgid from videos v  where v.createdAt >= DATE(NOW()) - INTERVAL ${days} DAY GROUP BY orgId`;
     const resultSet = await connection.execute(query);
     console.log(resultSet[0]);
     return resultSet[0];
   } catch (err) {
     console.log(`Error:- error thrown by getLastNDaysFreeResources() method at ( Controller.js ) ${err}`);
+    return err;
+  }
+});
+
+const getTableScoredData = (async (orgs) => {
+  console.log('getTableScoredData() executing..........');
+  try {
+
+  } catch (err) {
+    console.log(`Error:- error thrown by getTableScoredData() method at ( Controller.js ) ${err}`);
     return err;
   }
 });
@@ -178,10 +184,12 @@ const getTableData = (async (days) => {
     });
     return orgs; //  object  of all objects
   } catch (err) {
-    console.log(`Error:- error thrown by indexPageData() method at ( Controller.js ) ${err}`);
+    console.log(`Error:- error thrown by getTableData() method at ( Controller.js ) ${err}`);
     return err;
   }
 });
+
+
 module.exports = {
   getOrgs,
   testFn,
@@ -193,5 +201,6 @@ module.exports = {
   getLastNDaysOfflineTest,
   getLastNDaysFreeResources,
   // indexPageData,
+  getTableScoredData,
   getTableData,
 };
